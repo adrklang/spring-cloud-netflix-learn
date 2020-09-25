@@ -1,0 +1,24 @@
+server:
+  port: 9725
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://172.16.159.128:6636/microservice-oauth2?useSSL=false&serverTimezone=GMT%2B8&character=UTF8&allowMultiQueries=true&characterEncoding=utf8
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      max-lifetime: 300000
+      idle-timeout: 30000
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_empty
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['health','info']
+logging:
+  config: classpath:logback.xml

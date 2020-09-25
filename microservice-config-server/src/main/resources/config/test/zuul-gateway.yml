@@ -1,0 +1,29 @@
+server:
+  port: 9999
+zuul:
+  #sensitive-headers:
+  add-host-header: true
+  host:
+    connect-timeout-millis: 30000
+    connection-request-timeout-millis: 6000
+    max-per-route-connections: 50
+    max-total-connections: 300
+    socket-timeout-millis: 30000
+  ignored-headers:
+  retryable: true
+  routes:
+    auth:
+      path: /uaa/**
+      serviceId: uaa-server
+      retryable: true
+ribbon:
+  ReadTimeout: 2000
+  ConnectTimeout: 4000
+  MaxAutoRetries: 3
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000

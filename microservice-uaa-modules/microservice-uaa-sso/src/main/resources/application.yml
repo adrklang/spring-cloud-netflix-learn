@@ -1,0 +1,33 @@
+
+ribbon:
+  ReadTimeout: 1000
+  ConnectTimeout: 1500
+  MaxAutoRetries: 2
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE #THREAD 会导致token传递失效因此使用 SEMAPHORE解决线程隔离问题
+          thread:
+            timeoutInMilliseconds: 10000
+feign:
+  hystrix:
+    enabled: true
+server:
+  port: 9780
+security:
+  oauth2:
+    client:
+      logout-uri: http://uaa.lhstack.com:9720/oauth2/logout
+      client-id: uaa
+      client-secret: 123456
+      access-token-uri: http://uaa.lhstack.com:9720/oauth/token
+      user-authorization-uri: http://uaa.lhstack.com:9720/oauth/authorize
+      use-current-uri: true #如果为false，则重定向url使用pre-established-redirect-uri
+      pre-established-redirect-uri: http://localhost:8080/oauth/token_receive
+      token-name: token
+    resource:
+      user-info-uri:  http://uaa.lhstack.com:9725/oauth/userInfo
+    sso:
+      login-path: /login #配置重定向页面

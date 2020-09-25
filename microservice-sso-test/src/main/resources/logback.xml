@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+
+    <property name="logPath" value="${user.dir}/log" />
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread])|-%highlight(%-5level) %boldMagenta(%logger{50})-%cyan(%msg%n)"/>
+
+    <appender name="debugConsoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--过滤级别-->
+            <level>DEBUG</level>
+        </filter>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %blue([%thread])|-%red(%-5level) %green(%logger{50})-%cyan(%msg%n)
+            </pattern>
+        </layout>
+    </appender>
+    <!--控制台打印格式-->
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--过滤级别-->
+            <level>INFO</level>
+        </filter>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                ${CONSOLE_LOG_PATTERN}
+            </pattern>
+        </layout>
+    </appender>
+    <appender name="infoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/info/info.log</file>
+        <bufferSize>5MB</bufferSize>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤级别-->
+            <level>INFO</level>
+            <!--满足条件-->
+            <onMatch>ACCEPT</onMatch>
+            <!--不满足条件-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--文件路径-->
+            <fileNamePattern>
+                ${logPath}/info/%d{yyyy-MM-dd}/info-%d{yyyy-MM-dd HH}-%i.log
+            </fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="debugLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/debug/debug.log</file>
+        <bufferSize>5MB</bufferSize>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤级别-->
+            <level>DEBUG</level>
+            <!--满足条件-->
+            <onMatch>ACCEPT</onMatch>
+            <!--不满足条件-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--文件路径-->
+            <fileNamePattern>
+                ${logPath}/debug/%d{yyyy-MM-dd}/debug-%d{yyyy-MM-dd HH}-%i.log
+            </fileNamePattern>
+            <!--过期时间-->
+            <maxHistory>5</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="warnLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/warn/warn.log</file>
+        <bufferSize>5MB</bufferSize>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤级别-->
+            <level>WARN</level>
+            <!--满足条件-->
+            <onMatch>ACCEPT</onMatch>
+            <!--不满足条件-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--文件路径-->
+            <fileNamePattern>
+                ${logPath}/warn/%d{yyyy-MM-dd}/warn-%d{yyyy-MM-dd HH}-%i.log
+            </fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/error/error.log</file>
+        <bufferSize>5MB</bufferSize>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--过滤级别-->
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+            </pattern>
+        </encoder>
+        <!--日志回滚-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--文件路径-->
+            <fileNamePattern>
+                ${logPath}/error/%d{yyyy-MM-dd}/error-%d{yyyy-MM-dd HH}-%i.log
+            </fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="allLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/all/all.log</file>
+        <bufferSize>10MB</bufferSize>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--过滤级别-->
+            <level>TRACE</level>
+        </filter>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+            </pattern>
+        </encoder>
+        <!--日志回滚-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--文件路径-->
+            <fileNamePattern>
+                ${logPath}/all/%d{yyyy-MM-dd}/all-%d{yyyy-MM-dd HH}-%i.log
+            </fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <!--<appender name="mysqlAppender" class="com.lhstack.permission.system.appender.MysqlLogbackAppender">
+        <url>jdbc:mysql://localhost:3306/shiro?useSSL=false&amp;serverTimezone=GMT%2B8&amp;character=UTF8&amp;allowMultiQueries=true&amp;characterEncoding=utf8</url>
+        <username>root</username>
+        <password>123456</password>
+        <driverClassName>com.mysql.cj.jdbc.Driver</driverClassName>
+    </appender>
+
+    <logger name="com.lhstack.permission.system.aspect.log.LogAspect" value="INFO"  additivity="false" >
+        <appender-ref ref="mysqlAppender"/>
+    </logger>-->
+
+
+    <!--应用日志-->
+    <root level="debug">
+        <appender-ref ref="debugConsoleLog"/>
+        <!--<appender-ref ref="consoleLog" />-->
+        <appender-ref ref="infoLog" />
+        <appender-ref ref="errorLog" />
+        <appender-ref ref="warnLog" />
+        <!--<appender-ref ref="debugLog"></appender-ref>
+        <appender-ref ref="allLog"></appender-ref>-->
+    </root>
+</configuration>

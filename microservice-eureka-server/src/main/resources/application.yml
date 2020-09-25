@@ -1,0 +1,29 @@
+server:
+  port: 9520
+eureka:
+  instance:
+    security:
+      username: admin
+      password: 123456
+    registry-urls: http://${eureka.instance.security.username}:${eureka.instance.security.password}@${eureka.instance.hostname}:9520/eureka
+    hostname: eureka.lhstack.com
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10 #设置服务恢复租期
+    lease-expiration-duration-in-seconds: 30 #配置服务终结租期
+    status-page-url-path: /actuator/health #配置状态页面
+    health-check-url-path: /actuator/health #配置健康检查路径
+  server:
+    eviction-interval-timer-in-ms: 2000 #设置服务剔除间隔
+    enable-self-preservation: false #关闭安全保护
+  client:
+    fetch-registry: false #注册中心，不需要拉取服务
+    register-with-eureka: false #注册中心，不需要注册自己
+    service-url:
+      defaultZone: ${eureka.instance.registry-urls}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['health','info']
+logging:
+  config: classpath:logback.xml

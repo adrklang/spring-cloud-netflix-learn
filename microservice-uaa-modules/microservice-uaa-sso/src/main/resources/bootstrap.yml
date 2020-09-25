@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: uaa-sso-client
+  cloud:
+    config:
+      label: test
+      username: admin
+      password: 123456
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: true
+      allow-override: true
+eureka:
+  instance:
+    security:
+      username: admin
+      password: 123456
+    registry-urls: http://${eureka.instance.security.username}:${eureka.instance.security.password}@eureka.lhstack.com:9520/eureka
+    health-check-url-path: /actuator/health
+    status-page-url-path: /actuator/health
+    hostname: uaa-client.lhstack.com
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 10
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:123456@eureka.lhstack.com:9520/eureka
+    fetch-registry: true
+    register-with-eureka: true
