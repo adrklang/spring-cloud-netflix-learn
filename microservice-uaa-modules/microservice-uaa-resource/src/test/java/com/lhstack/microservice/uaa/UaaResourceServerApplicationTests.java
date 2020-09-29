@@ -1,5 +1,6 @@
 package com.lhstack.microservice.uaa;
 
+import com.lhstack.microservice.common.resp.PageResult;
 import com.lhstack.microservice.uaa.service.ClientsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,7 @@ class UaaResourceServerApplicationTests {
 
     @Test
     void testFindByPageClient(){
-        Page<ClientDetails> clientDetails = clientsService.findByPage(2, 2);
-        List<ClientDetails> content = clientDetails.getContent();
-        content.forEach(System.out::println);
+        PageResult<ClientDetails> byPage = clientsService.findByPage(2, 2);
+
     }
 }

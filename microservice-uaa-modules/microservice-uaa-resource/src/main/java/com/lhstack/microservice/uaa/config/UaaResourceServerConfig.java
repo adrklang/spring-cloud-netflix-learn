@@ -3,15 +3,21 @@ package com.lhstack.microservice.uaa.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 /**
  * @class: UaaResourceServerConfig
@@ -46,6 +52,14 @@ public class UaaResourceServerConfig extends ResourceServerConfigurerAdapter {
         remoteTokenServices.setClientSecret("123456");
         remoteTokenServices.setCheckTokenEndpointUrl("http://uaa.lhstack.com:9720/oauth/check_token");
         remoteTokenServices.setRestTemplate(restTemplate());
+        remoteTokenServices.setAccessTokenConverter(new DefaultAccessTokenConverter() {
+
+            @Override
+            public OAuth2Authentication extractAuthentication(Map<String, ?> map) {
+                System.out.println(map);
+                return super.extractAuthentication(map);
+            }
+        });
         return remoteTokenServices;
     }
 
@@ -53,14 +67,24 @@ public class UaaResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/actuator/**")
+                .permitAll()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.stateless(true)
                 .resourceId("uaa-resource")
+                .accessDeniedHandler((request, response, e) -> {
+
+                })
                 .tokenServices(remoteTokenServices());
     }
 }

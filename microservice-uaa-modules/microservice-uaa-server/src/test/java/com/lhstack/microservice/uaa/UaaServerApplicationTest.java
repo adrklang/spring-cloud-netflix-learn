@@ -39,9 +39,9 @@ class UaaServerApplicationTest {
         BaseClientDetails baseClientDetails = new BaseClientDetails();
         baseClientDetails.setAuthorities(Collections.singleton(new SimpleGrantedAuthority("ADMIN")));
         // baseClientDetails.setAutoApproveScopes(Arrays.asList("web","app"));
-        baseClientDetails.setClientId("uaa-client");
+        baseClientDetails.setClientId("admin");
         baseClientDetails.setClientSecret("123456");
-        baseClientDetails.setResourceIds(Arrays.asList("uaa"));
+        baseClientDetails.setResourceIds(Arrays.asList("admin"));
         baseClientDetails.setScope(Arrays.asList("web","app"));
         baseClientDetails.setRegisteredRedirectUri(Collections.singleton("http://localhost:8080/login/sso"));
         clientDetailsService.addClientDetails(baseClientDetails);

@@ -1,7 +1,12 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ['health','info','heapdump','threaddump']
 server:
   port: 9999
 zuul:
-  #sensitive-headers:
+  sensitive-headers:
   add-host-header: true
   host:
     connect-timeout-millis: 30000

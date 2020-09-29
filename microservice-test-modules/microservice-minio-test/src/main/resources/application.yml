@@ -1,0 +1,8 @@
+com:
+  lhstack:
+    minio:
+      endpoint: http://172.16.159.128:9000
+      access-key: admin123
+      access-secret: 12345678
+      enable: true
+      default-bucket-name: picture

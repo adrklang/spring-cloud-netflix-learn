@@ -1,0 +1,22 @@
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+security:
+  oauth2:
+    client:
+      logout-uri: http://uaa.lhstack.com:8080/oauth2/logout
+      client-id: base-client
+      client-secret: 123456
+      access-token-uri: http://uaa.lhstack.com:8080/oauth/token
+      user-authorization-uri: http://uaa.lhstack.com:8080/oauth/authorize
+      use-current-uri: true #如果为false，则重定向url使用pre-established-redirect-uri
+      pre-established-redirect-uri: http://localhost:8081/oauth/token_receive
+      token-name: access_token
+    resource:
+      user-info-uri:  http://uaa.lhstack.com:8080/users/userInfo
+    sso:
+      login-path: /login/oauth2/code/sso #配置重定向页面
+server:
+  port: 8081
+debug: true

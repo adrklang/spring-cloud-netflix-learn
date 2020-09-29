@@ -3,12 +3,10 @@ package com.lhstack.microservice.uaa.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lhstack.microservice.common.exceptions.ExistResourceException;
+import com.lhstack.microservice.common.resp.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
@@ -43,8 +41,16 @@ public class ClientsService {
     private JdbcTemplate jdbcTemplate;
 
     @Transactional(readOnly = false,propagation = Propagation.REQUIRED)
-    public ClientDetails insert(ClientDetails clientDetails){
-        jdbcClientDetailsService.addClientDetails(clientDetails);
+    public ClientDetails insert(BaseClientDetails clientDetails){
+        ClientDetails result = null;
+        try{
+            result = jdbcClientDetailsService.loadClientByClientId(clientDetails.getClientId());
+        }catch (Exception e){
+            jdbcClientDetailsService.addClientDetails(clientDetails);
+        }
+        if(result != null){
+            throw new ExistResourceException("客户端已存在，请不要重复添加!!!");
+        }
         return clientDetails;
     }
 
@@ -59,7 +65,7 @@ public class ClientsService {
     }
 
     @Transactional(readOnly = false,propagation = Propagation.REQUIRED)
-    public ClientDetails update(ClientDetails clientDetails){
+    public ClientDetails update(BaseClientDetails clientDetails){
         jdbcClientDetailsService.updateClientDetails(clientDetails);
         return clientDetails;
     }
@@ -73,7 +79,7 @@ public class ClientsService {
 
 
     @Transactional(readOnly = true,propagation = Propagation.SUPPORTS)
-    public Page<ClientDetails> findByPage(Integer page,Integer size){
+    public PageResult<ClientDetails> findByPage(Integer page, Integer size){
         long count = jdbcTemplate.query("SELECT COUNT( * ) AS total FROM oauth_client_details", rs -> {
             long total = 0;
             while (rs.next()) {
@@ -85,7 +91,7 @@ public class ClientsService {
             page = 1;
         }
         page = (page - 1) * size;
-        List<ClientDetails> details = jdbcTemplate.query("SELECT client_id,client_secret,resource_ids, scope,authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove FROM oauth_client_details LIMIT ?,?", new Object[]{page, size}, (RowMapper<ClientDetails>) (rs, rowNum) -> {
+        List<ClientDetails> details = jdbcTemplate.query("SELECT client_id,client_secret,resource_ids, scope,authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove FROM oauth_client_details LIMIT ?,?", new Object[]{page, size}, (rs, rowNum) -> {
             BaseClientDetails baseClientDetails = new BaseClientDetails();
             String resourceIds = rs.getString("resource_ids");
             String scope = rs.getString("scope");
@@ -119,8 +125,7 @@ public class ClientsService {
             baseClientDetails.setResourceIds(Arrays.asList(resourceIds.split(",")));
             return baseClientDetails;
         });
-
-        return new PageImpl<>(details, PageRequest.of(page + 1,size),count);
+        return new PageResult<>("查询客户端数据列表成功",details,count);
     }
 
 }

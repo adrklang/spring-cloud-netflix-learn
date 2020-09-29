@@ -1,8 +1,9 @@
 package com.lhstack.microservice.uaa.controller;
 
+import com.lhstack.microservice.common.resp.PageResult;
+import com.lhstack.microservice.common.resp.Result;
 import com.lhstack.microservice.uaa.service.ClientsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @class: ClientController
@@ -33,28 +32,24 @@ public class ClientController {
 
 
     @PostMapping("insert")
-    public ResponseEntity<ClientDetails> insertClient(@RequestBody BaseClientDetails baseClientDetails){
-        return ResponseEntity.ok(clientsService.insert(baseClientDetails));
+    public ResponseEntity<Result<ClientDetails>> insertClient(@RequestBody BaseClientDetails baseClientDetails){
+        return ResponseEntity.ok(Result.ok(clientsService.insert(baseClientDetails)));
     }
 
     @DeleteMapping("del/{clientId}")
-    public ResponseEntity<Boolean> removeClient(@PathVariable("clientId") String clientId){
+    public ResponseEntity<Result> removeClient(@PathVariable("clientId") String clientId){
         clientsService.remove(clientId);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(Result.ok());
     }
 
     @PutMapping("update")
-    public ResponseEntity<ClientDetails> updateClient(@RequestBody BaseClientDetails baseClientDetails){
+    public ResponseEntity<Result<ClientDetails>> updateClient(@RequestBody BaseClientDetails baseClientDetails){
         ClientDetails update = clientsService.update(baseClientDetails);
-        return ResponseEntity.ok(update);
+        return ResponseEntity.ok(Result.ok(update));
     }
 
     @GetMapping("list/{page}/{size}")
-    public ResponseEntity<List<ClientDetails>> list(@PathVariable("page") Integer page, @PathVariable("size") Integer size) throws InterruptedException {
-        System.out.println(page);
-        System.out.println(size);
-        Page<ClientDetails> pageResult = clientsService.findByPage(page, size);
-        System.out.println(pageResult);
-        return ResponseEntity.ok(pageResult.getContent());
+    public ResponseEntity<PageResult<ClientDetails>> list(@PathVariable("page") Integer page, @PathVariable("size") Integer size) throws InterruptedException {
+        return ResponseEntity.ok(clientsService.findByPage(page, size));
     }
 }

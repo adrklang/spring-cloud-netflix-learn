@@ -42,7 +42,7 @@ public class UaaZuulFilter extends ZuulFilter {
     @Override
     public Object run() throws ZuulException {
         RequestContext currentContext = RequestContext.getCurrentContext();
-        currentContext.addZuulRequestHeader("Authorization","Basic " + Base64.encodeBase64URLSafeString("zuul-gateway:123456".getBytes()));
+        currentContext.addZuulRequestHeader("Authorization","Basic " + Base64.encodeBase64URLSafeString("uaa:123456".getBytes()));
         return null;
     }
 }

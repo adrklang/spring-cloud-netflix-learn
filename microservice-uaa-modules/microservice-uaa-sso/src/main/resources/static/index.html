@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This is Uaa Client</title>
+</head>
+<body>
+    <div id="app">
+        {{msg}}
+    </div>
+</body>
+<script type="text/javascript" src="/js/vue.global.js"></script>
+<script type="text/javascript">
+    let app = {
+        data: () =>{
+            return {
+                msg:"hello"
+            }
+        }
+    }
+    Vue.createApp(app).mount("#app")
+</script>
+</html>

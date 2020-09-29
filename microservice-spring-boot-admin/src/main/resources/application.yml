@@ -1,0 +1,9 @@
+server:
+  port: 9600
+logging:
+  config: classpath:logback.xml
+spring:
+  boot:
+    admin:
+      ui:
+        title: Microservice Applications

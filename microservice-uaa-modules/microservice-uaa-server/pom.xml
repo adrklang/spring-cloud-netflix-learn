@@ -19,6 +19,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.lhstack.microservice</groupId>
+            <artifactId>microservice-common</artifactId>
+            <version>${microservice.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>

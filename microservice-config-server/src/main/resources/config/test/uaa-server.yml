@@ -19,6 +19,6 @@ management:
   endpoints:
     web:
       exposure:
-        include: ['health','info']
+        include: ['health','info','heapdump','threaddump']
 logging:
   config: classpath:logback.xml

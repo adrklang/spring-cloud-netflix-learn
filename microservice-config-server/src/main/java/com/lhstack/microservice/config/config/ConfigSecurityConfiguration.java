@@ -28,7 +28,7 @@ public class ConfigSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/actuator/health","/actuator/info")
+                .antMatchers("/actuator/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

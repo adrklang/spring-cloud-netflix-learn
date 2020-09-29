@@ -1,6 +1,8 @@
 package com.lhstack.microservice.uaa.controller;
 
+import com.lhstack.microservice.common.resp.Result;
 import com.lhstack.microservice.uaa.service.TokenService;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -10,6 +12,8 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 /**
  * @class: LogoutController
@@ -26,14 +30,15 @@ public class OauthController {
     private TokenService tokenService;
 
     @GetMapping("userInfo")
-    public ResponseEntity<Authentication> userInfo(@AuthenticationPrincipal Authentication authentication){
+    public ResponseEntity<Authentication> userInfo(@AuthenticationPrincipal Authentication authentication) throws IOException {
+        System.out.println(new ObjectMapper().writeValueAsString(authentication));
         return ResponseEntity.ok(authentication);
     }
 
     @GetMapping("logout")
-    public ResponseEntity<Boolean> logout(@AuthenticationPrincipal OAuth2Authentication oAuth2Authentication){
+    public ResponseEntity<Result> logout(@AuthenticationPrincipal OAuth2Authentication oAuth2Authentication){
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) oAuth2Authentication.getDetails();
         tokenService.removeToken(details.getTokenValue());
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(Result.ok());
     }
 }
